@@ -1,40 +1,32 @@
 
 package common;
 
+
+import java.io.InputStream;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
+
+
 
 public class DBUtil {
+    private static final Properties queries = new Properties();
 
-    public static Connection getConnection() throws SQLException {
-
-        Properties props = new Properties();
-
-        try (FileInputStream fis =
-                     new FileInputStream("db.properties")) {
-
-            props.load(fis);
-
-        } catch (IOException e) {
-            throw new SQLException(
-                    "DB 설정 파일을 읽을 수 없습니다.", e);
+    // XML에서 쿼리를 로드하는 정적 블록
+    static {
+        try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("queries.xml")) {
+            queries.loadFromXML(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException("쿼리 로딩 중 오류 발생", e);
         }
+    }
 
-        String url = props.getProperty("db.url");
-        String user = props.getProperty("db.username");
-        String password = props.getProperty("db.password");
+    public static String getQuery(String key) {
+        return queries.getProperty(key).trim();
 
-        if (url == null || user == null || password == null) {
-            throw new SQLException(
-                    "DB 연결 설정이 누락되었습니다.");
-        }
-
-        return DriverManager.getConnection(
-                url, user, password
-        );
     }
 }
+
