@@ -18,4 +18,10 @@ public class MemberController {
 
         return memberList;
     }
+
+    // 요청을 Service 로 전달만 한다. 검증은 Service 에서 처리한다.
+    public void register(MemberDTO member) {
+
+        memberService.register(member);
+    }
 }

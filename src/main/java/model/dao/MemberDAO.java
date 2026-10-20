@@ -45,4 +45,33 @@ public class MemberDAO {
         return members;
     }
 
+    // 로그인 아이디 중복 여부 확인
+    public boolean existsByLoginId(String loginId) throws SQLException {
+
+        String query = DBUtil.getQuery("member.existsByLoginId");
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, loginId);
+
+            try (ResultSet rset = pstmt.executeQuery()) {
+                rset.next();
+                return rset.getInt(1) > 0;
+            }
+        }
+    }
+
+    // 회원 등록 (권한은 쿼리에서 USER 로 고정)
+    public int insert(MemberDTO member) throws SQLException {
+
+        String query = DBUtil.getQuery("member.insert");
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, member.getLoginId());
+            pstmt.setString(2, member.getPassword());
+            pstmt.setString(3, member.getMemberName());
+            pstmt.setString(4, member.getPhone());
+
+            return pstmt.executeUpdate();
+        }
+    }
 }

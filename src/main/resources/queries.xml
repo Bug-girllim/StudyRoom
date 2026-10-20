@@ -9,4 +9,20 @@
             MEMBER
     </entry>
 
+    <entry key="member.existsByLoginId">
+        SELECT
+            COUNT(*)
+        FROM
+            MEMBER
+        WHERE
+            LOGIN_ID = ?
+    </entry>
+
+    <entry key="member.insert">
+        INSERT INTO MEMBER
+            (LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE)
+        VALUES
+            (?, ?, ?, ?, 'USER')
+    </entry>
+
 </properties>
