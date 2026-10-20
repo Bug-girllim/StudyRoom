@@ -32,7 +32,49 @@
     <entry key="timeSlot.isReserved">
         SELECT COUNT(*)
         FROM studyroom.reservation
-        WHERE slot_id = ?
+        WHERE slot_id = ?    
+     </entry>
+
+    <entry key="member.findAll">
+        SELECT
+            MEMBER_ID, LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE
+        FROM
+            MEMBER
+    </entry>
+
+    <entry key="member.findByLoginId">
+        SELECT
+            MEMBER_ID, LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE
+        FROM
+            MEMBER
+        WHERE
+            LOGIN_ID = ?
+    </entry>
+
+    <entry key="member.existsByLoginId">
+        SELECT
+            COUNT(*)
+        FROM
+            MEMBER
+        WHERE
+            LOGIN_ID = ?
+    </entry>
+
+    <entry key="member.update">
+        UPDATE MEMBER
+        SET
+            PASSWORD = ?,
+            MEMBER_NAME = ?,
+            PHONE = ?
+        WHERE
+            MEMBER_ID = ?
+    </entry>
+
+    <entry key="member.insert">
+        INSERT INTO MEMBER
+            (LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE)
+        VALUES
+            (?, ?, ?, ?, 'USER')
     </entry>
 
 </properties>

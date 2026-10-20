@@ -1,42 +1,29 @@
 package common;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 
 public class DBUtil {
-
     private static final Properties queries = new Properties();
 
+    // XML에서 쿼리를 로드하는 정적 블록
     static {
-        try (InputStream is = DBUtil.class
-                .getClassLoader()
-                .getResourceAsStream("queries.xml")) {
-
-            if (is == null) {
-                throw new IllegalStateException(
-                        "queries.xml 파일을 찾을 수 없습니다.");
-            }
-
-            queries.loadFromXML(is);
-
-        } catch (IOException e) {
-            throw new IllegalStateException(
-                    "SQL 설정 파일을 읽을 수 없습니다.", e);
+        try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("queries.xml")) {
+            queries.loadFromXML(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException("쿼리 로딩 중 오류 발생", e);
         }
     }
 
-    // queries.xml에서 SQL문 가져오기
     public static String getQuery(String key) {
+        return queries.getProperty(key).trim();
 
-        String sql = queries.getProperty(key);
-
-        if (sql == null) {
-            throw new IllegalArgumentException(
-                    "SQL을 찾을 수 없습니다: " + key);
-        }
-
-        return sql;
     }
 }
 
