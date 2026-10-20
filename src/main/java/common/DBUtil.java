@@ -1,28 +1,22 @@
 package common;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class DBUtil {
-    // 접속 정보는 프로젝트 루트의 db.properties에서 읽어 온다
-    private static final Properties props = new Properties();
+    private static final Properties queries = new Properties();
 
+    // XML에서 쿼리를 로드하는 정적 블록
     static {
-        try (FileInputStream fis = new FileInputStream("db.properties")) {
-            props.load(fis);
-        } catch (IOException e) {
-            throw new RuntimeException("db.properties 파일을 찾을 수 없습니다.", e);
+        try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream("queries.xml")) {
+            queries.loadFromXML(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException("쿼리 로딩 중 오류 발생", e);
         }
     }
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-                props.getProperty("url"),
-                props.getProperty("user"),
-                props.getProperty("password"));
+    public static String getQuery(String key) {
+        return queries.getProperty(key).trim();
     }
 }
+
