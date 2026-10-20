@@ -41,3 +41,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# MySQL 개인 연결 정보
+db.properties
