@@ -1,16 +1,7 @@
-
 package common;
 
-
 import java.io.InputStream;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-
+import java.util.Properties;
 
 public class DBUtil {
     private static final Properties queries = new Properties();
@@ -26,7 +17,5 @@ public class DBUtil {
 
     public static String getQuery(String key) {
         return queries.getProperty(key).trim();
-
     }
 }
-

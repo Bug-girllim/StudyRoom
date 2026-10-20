@@ -47,5 +47,4 @@ db.properties
 ### IntelliJ DB connection ###
 .idea/dataSources.xml
 .idea/dataSources.local.xml
-.idea/dataSoures/
-
+.idea/dataSources/
