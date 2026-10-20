@@ -1,21 +1,28 @@
 package common;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBUtil {
+    // 접속 정보는 프로젝트 루트의 db.properties에서 읽어 온다
+    private static final Properties props = new Properties();
 
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/studyroom";
+    static {
+        try (FileInputStream fis = new FileInputStream("db.properties")) {
+            props.load(fis);
+        } catch (IOException e) {
+            throw new RuntimeException("db.properties 파일을 찾을 수 없습니다.", e);
+        }
+    }
 
-    private static final String USER = "root";
-
-    public static Connection getConnection(String password)
-            throws SQLException {
-
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                URL, USER, password
-        );
+                props.getProperty("url"),
+                props.getProperty("user"),
+                props.getProperty("password"));
     }
 }
