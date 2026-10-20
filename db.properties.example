@@ -1,0 +1,3 @@
+db.url=jdbc:mysql://localhost:3306/studyroom
+db.username=root
+db.password=각자_설정한_MySQL_비밀번호
