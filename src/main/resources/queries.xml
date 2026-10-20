@@ -1,6 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+
+    <!-- 타임슬롯 전체 조회 -->
+    <entry key="timeSlot.selectAll">
+        SELECT slot_id, start_time, end_time
+        FROM studyroom.time_slot
+        ORDER BY start_time
+    </entry>
+
+    <!-- 타임슬롯 등록 -->
+    <entry key="timeSlot.insert">
+        INSERT INTO studyroom.time_slot (start_time, end_time)
+        VALUES (?, ?)
+    </entry>
+
+    <!-- 타임슬롯 수정 -->
+    <entry key="timeSlot.update">
+        UPDATE studyroom.time_slot
+        SET start_time = ?, end_time = ?
+        WHERE slot_id = ?
+    </entry>
+
+    <!-- 타임슬롯 삭제 -->
+    <entry key="timeSlot.delete">
+        DELETE FROM studyroom.time_slot
+        WHERE slot_id = ?
+    </entry>
+
+    <!-- 예약 사용 여부 확인 -->
+    <entry key="timeSlot.isReserved">
+        SELECT COUNT(*)
+        FROM studyroom.reservation
+        WHERE slot_id = ?    
+     </entry>
 
     <entry key="member.findAll">
         SELECT
