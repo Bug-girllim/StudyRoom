@@ -1,40 +1,42 @@
-
 package common;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class DBUtil {
 
-    public static Connection getConnection() throws SQLException {
+    private static final Properties queries = new Properties();
 
-        Properties props = new Properties();
+    static {
+        try (InputStream is = DBUtil.class
+                .getClassLoader()
+                .getResourceAsStream("queries.xml")) {
 
-        try (FileInputStream fis =
-                     new FileInputStream("db.properties")) {
+            if (is == null) {
+                throw new IllegalStateException(
+                        "queries.xml 파일을 찾을 수 없습니다.");
+            }
 
-            props.load(fis);
+            queries.loadFromXML(is);
 
         } catch (IOException e) {
-            throw new SQLException(
-                    "DB 설정 파일을 읽을 수 없습니다.", e);
+            throw new IllegalStateException(
+                    "SQL 설정 파일을 읽을 수 없습니다.", e);
+        }
+    }
+
+    // queries.xml에서 SQL문 가져오기
+    public static String getQuery(String key) {
+
+        String sql = queries.getProperty(key);
+
+        if (sql == null) {
+            throw new IllegalArgumentException(
+                    "SQL을 찾을 수 없습니다: " + key);
         }
 
-        String url = props.getProperty("db.url");
-        String user = props.getProperty("db.username");
-        String password = props.getProperty("db.password");
-
-        if (url == null || user == null || password == null) {
-            throw new SQLException(
-                    "DB 연결 설정이 누락되었습니다.");
-        }
-
-        return DriverManager.getConnection(
-                url, user, password
-        );
+        return sql;
     }
 }
+
