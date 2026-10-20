@@ -33,6 +33,7 @@ public class MemberInputView {
             System.out.println("2. 회원가입");
             System.out.println("3. 로그인");
             System.out.println("4. 로그아웃");
+            System.out.println("5. 내 정보 조회");
             System.out.println("0. 종료");
             System.out.print("메뉴를 입력해주세요 : ");
 
@@ -40,8 +41,12 @@ public class MemberInputView {
 
             switch (input) {
                 case "1":
-                    List<MemberDTO> memberList = memberController.findAllMembers();
-                    memberOutputView.printMembers(memberList);
+                    try {
+                        List<MemberDTO> memberList = memberController.findAllMembers();
+                        memberOutputView.printMembers(memberList);
+                    } catch (IllegalStateException e) {
+                        memberOutputView.printMessage("조회 실패 : " + e.getMessage());
+                    }
                     break;
                 case "2":
                     memberRegisterInputView.register();
@@ -51,6 +56,13 @@ public class MemberInputView {
                     break;
                 case "4":
                     memberLoginInputView.logout();
+                    break;
+                case "5":
+                    try {
+                        memberOutputView.printMyInfo(memberController.findMyInfo());
+                    } catch (IllegalStateException e) {
+                        memberOutputView.printMessage("조회 실패 : " + e.getMessage());
+                    }
                     break;
                 case "0":
                     memberOutputView.printMessage("프로그램을 종료합니다.");

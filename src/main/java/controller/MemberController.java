@@ -30,6 +30,11 @@ public class MemberController {
         memberService.login(loginId, password);
     }
 
+    public MemberDTO findMyInfo() {
+
+        return memberService.findMyInfo();
+    }
+
     public void logout() {
 
         memberService.logout();

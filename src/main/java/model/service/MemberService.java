@@ -13,7 +13,15 @@ public class MemberService {
 
     private static final String PHONE_PATTERN = "^01\\d-\\d{3,4}-\\d{4}$";
 
+    // 회원 전체 조회 : 로그인 여부 확인 -> 관리자 권한 확인 -> 조회
     public List<MemberDTO> findAllMembers() {
+
+        if (!LoginSession.isLoggedIn()) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        if (!LoginSession.isAdmin()) {
+            throw new IllegalStateException("관리자만 조회할 수 있습니다.");
+        }
 
         // try-with-resource 절
         // try-catch 절은 사용한 자원을 finally 구문에서 수동 해제해야 한다.
@@ -84,6 +92,28 @@ public class MemberService {
             // 세션에는 비밀번호를 보관하지 않는다.
             member.setPassword(null);
             LoginSession.login(member);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 내 정보 조회 : 로그인 여부 확인 -> 세션의 아이디로 DB 에서 최신 정보 조회
+    public MemberDTO findMyInfo() {
+
+        if (!LoginSession.isLoggedIn()) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        try (Connection con = JDBCTemplate.getConnection()) {
+
+            MemberDTO member = new MemberDAO(con).findByLoginId(LoginSession.getLoginMember().getLoginId());
+
+            if (member == null) {
+                throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+            }
+
+            return member;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
