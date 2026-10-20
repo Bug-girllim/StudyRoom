@@ -1,7 +1,7 @@
 package model.service;
 
 import common.LoginSession;
-import common.config.JDBCTemplate;
+import config.JDBCTemplate;
 import model.dao.MemberDAO;
 import model.dto.MemberDTO;
 
