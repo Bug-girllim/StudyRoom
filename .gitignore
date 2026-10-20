@@ -41,9 +41,11 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
 db.properties
 
 ### IntelliJ DB connection ###
 .idea/dataSources.xml
 .idea/dataSources.local.xml
-.idea/dataSources/
+.idea/dataSoures/
+
