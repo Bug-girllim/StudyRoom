@@ -9,6 +9,15 @@
             MEMBER
     </entry>
 
+    <entry key="member.findByLoginId">
+        SELECT
+            MEMBER_ID, LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE
+        FROM
+            MEMBER
+        WHERE
+            LOGIN_ID = ?
+    </entry>
+
     <entry key="member.existsByLoginId">
         SELECT
             COUNT(*)

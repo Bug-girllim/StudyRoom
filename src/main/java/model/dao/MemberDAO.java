@@ -45,6 +45,30 @@ public class MemberDAO {
         return members;
     }
 
+    // 로그인 아이디로 회원 1명 조회 (없으면 null)
+    public MemberDTO findByLoginId(String loginId) throws SQLException {
+
+        String query = DBUtil.getQuery("member.findByLoginId");
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, loginId);
+
+            try (ResultSet rset = pstmt.executeQuery()) {
+                if (rset.next()) {
+                    return new MemberDTO(
+                            rset.getInt("MEMBER_ID"),
+                            rset.getString("LOGIN_ID"),
+                            rset.getString("PASSWORD"),
+                            rset.getString("MEMBER_NAME"),
+                            rset.getString("PHONE"),
+                            rset.getString("MEMBER_ROLE")
+                    );
+                }
+                return null;
+            }
+        }
+    }
+
     // 로그인 아이디 중복 여부 확인
     public boolean existsByLoginId(String loginId) throws SQLException {
 

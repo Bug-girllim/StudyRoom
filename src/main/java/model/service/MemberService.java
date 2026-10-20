@@ -1,5 +1,6 @@
 package model.service;
 
+import common.LoginSession;
 import common.config.JDBCTemplate;
 import model.dao.MemberDAO;
 import model.dto.MemberDTO;
@@ -56,6 +57,47 @@ public class MemberService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // 로그인 : 이미 로그인 여부 확인 -> 입력값 검증 -> 회원 조회 -> 비밀번호 비교 -> 세션 저장
+    public void login(String loginId, String password) {
+
+        if (LoginSession.isLoggedIn()) {
+            throw new IllegalStateException("이미 로그인 상태입니다.");
+        }
+        if (isBlank(loginId)) {
+            throw new IllegalArgumentException("아이디를 입력해주세요.");
+        }
+        if (isBlank(password)) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+        }
+
+        try (Connection con = JDBCTemplate.getConnection()) {
+
+            MemberDTO member = new MemberDAO(con).findByLoginId(loginId);
+
+            // 아이디 존재 여부를 알려주지 않도록 같은 메시지를 사용한다.
+            if (member == null || !member.getPassword().equals(password)) {
+                throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
+            }
+
+            // 세션에는 비밀번호를 보관하지 않는다.
+            member.setPassword(null);
+            LoginSession.login(member);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 로그아웃 : 로그인 상태가 아니면 거부
+    public void logout() {
+
+        if (!LoginSession.isLoggedIn()) {
+            throw new IllegalStateException("로그인 상태가 아닙니다.");
+        }
+
+        LoginSession.logout();
     }
 
     private boolean isBlank(String value) {

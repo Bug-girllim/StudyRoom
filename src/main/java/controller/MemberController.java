@@ -24,4 +24,14 @@ public class MemberController {
 
         memberService.register(member);
     }
+
+    public void login(String loginId, String password) {
+
+        memberService.login(loginId, password);
+    }
+
+    public void logout() {
+
+        memberService.logout();
+    }
 }
