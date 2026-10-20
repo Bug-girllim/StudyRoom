@@ -57,14 +57,23 @@ public class RoomInputView {
 
             try {
                 switch (menu) {
-                    case 1 -> register();
-                    case 2 -> displayRoomList();
-                    case 3 -> modify();
-                    case 4 -> remove();
-                    case 0 -> {
+                    case 1:
+                        register();
+                        break;
+                    case 2:
+                        displayRoomList();
+                        break;
+                    case 3:
+                        modify();
+                        break;
+                    case 4:
+                        remove();
+                        break;
+                    case 0:
                         return;
-                    }
-                    default -> System.out.println("올바른 메뉴 번호를 입력해 주세요.");
+                    default:
+                        System.out.println("올바른 메뉴 번호를 입력해 주세요.");
+                        break;
                 }
             } catch (RuntimeException e) {
                 printError(e);
