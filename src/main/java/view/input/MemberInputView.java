@@ -13,6 +13,7 @@ public class MemberInputView {
     private final MemberOutputView memberOutputView;
     private final MemberRegisterInputView memberRegisterInputView;
     private final MemberLoginInputView memberLoginInputView;
+    private final MemberUpdateInputView memberUpdateInputView;
     private final Scanner sc = new Scanner(System.in);
 
     // 생성자를 통한 필드 초기화
@@ -20,7 +21,9 @@ public class MemberInputView {
         this.memberController = memberController;
         this.memberOutputView = memberOutputView;
         this.memberRegisterInputView = new MemberRegisterInputView(sc, memberController, memberOutputView);
-        this.memberLoginInputView = new MemberLoginInputView(sc, memberController, memberOutputView);    }
+        this.memberLoginInputView = new MemberLoginInputView(sc, memberController, memberOutputView);
+        this.memberUpdateInputView = new MemberUpdateInputView(sc, memberController, memberOutputView);
+    }
 
     public void displayMainView() {
 
@@ -34,6 +37,7 @@ public class MemberInputView {
             System.out.println("3. 로그인");
             System.out.println("4. 로그아웃");
             System.out.println("5. 내 정보 조회");
+            System.out.println("6. 내 정보 수정");
             System.out.println("0. 종료");
             System.out.print("메뉴를 입력해주세요 : ");
 
@@ -63,6 +67,9 @@ public class MemberInputView {
                     } catch (IllegalStateException e) {
                         memberOutputView.printMessage("조회 실패 : " + e.getMessage());
                     }
+                    break;
+                case "6":
+                    memberUpdateInputView.update();
                     break;
                 case "0":
                     memberOutputView.printMessage("프로그램을 종료합니다.");

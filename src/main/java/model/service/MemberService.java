@@ -120,6 +120,57 @@ public class MemberService {
         }
     }
 
+    // 내 정보 수정 : 로그인 확인 -> 현재 비밀번호 확인 -> 입력값 검증 -> 수정
+    // 비어 있는 항목은 기존 값을 유지한다.
+    public void updateMyInfo(String currentPassword, MemberDTO changes) {
+
+        if (!LoginSession.isLoggedIn()) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        if (isBlank(currentPassword)) {
+            throw new IllegalArgumentException("현재 비밀번호를 입력해주세요.");
+        }
+        if (isBlank(changes.getPassword()) && isBlank(changes.getMemberName()) && isBlank(changes.getPhone())) {
+            throw new IllegalArgumentException("변경할 내용이 없습니다.");
+        }
+        if (!isBlank(changes.getPhone()) && !changes.getPhone().matches(PHONE_PATTERN)) {
+            throw new IllegalArgumentException("전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
+        }
+
+        try (Connection con = JDBCTemplate.getConnection()) {
+
+            MemberDAO memberDAO = new MemberDAO(con);
+
+            MemberDTO member = memberDAO.findByLoginId(LoginSession.getLoginMember().getLoginId());
+
+            if (member == null) {
+                throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+            }
+            if (!member.getPassword().equals(currentPassword)) {
+                throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
+            }
+
+            if (!isBlank(changes.getPassword())) {
+                member.setPassword(changes.getPassword());
+            }
+            if (!isBlank(changes.getMemberName())) {
+                member.setMemberName(changes.getMemberName());
+            }
+            if (!isBlank(changes.getPhone())) {
+                member.setPhone(changes.getPhone());
+            }
+
+            memberDAO.update(member);
+
+            // 세션에 보관 중인 정보도 최신 값으로 맞춘다. (비밀번호는 보관하지 않는다)
+            LoginSession.getLoginMember().setMemberName(member.getMemberName());
+            LoginSession.getLoginMember().setPhone(member.getPhone());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // 로그아웃 : 로그인 상태가 아니면 거부
     public void logout() {
 

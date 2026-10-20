@@ -84,6 +84,21 @@ public class MemberDAO {
         }
     }
 
+    // 회원 정보 수정 (비밀번호, 이름, 전화번호)
+    public int update(MemberDTO member) throws SQLException {
+
+        String query = DBUtil.getQuery("member.update");
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, member.getPassword());
+            pstmt.setString(2, member.getMemberName());
+            pstmt.setString(3, member.getPhone());
+            pstmt.setInt(4, member.getMemberId());
+
+            return pstmt.executeUpdate();
+        }
+    }
+
     // 회원 등록 (권한은 쿼리에서 USER 로 고정)
     public int insert(MemberDTO member) throws SQLException {
 

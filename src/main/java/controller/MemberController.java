@@ -35,6 +35,11 @@ public class MemberController {
         return memberService.findMyInfo();
     }
 
+    public void updateMyInfo(String currentPassword, MemberDTO changes) {
+
+        memberService.updateMyInfo(currentPassword, changes);
+    }
+
     public void logout() {
 
         memberService.logout();

@@ -27,6 +27,16 @@
             LOGIN_ID = ?
     </entry>
 
+    <entry key="member.update">
+        UPDATE MEMBER
+        SET
+            PASSWORD = ?,
+            MEMBER_NAME = ?,
+            PHONE = ?
+        WHERE
+            MEMBER_ID = ?
+    </entry>
+
     <entry key="member.insert">
         INSERT INTO MEMBER
             (LOGIN_ID, PASSWORD, MEMBER_NAME, PHONE, MEMBER_ROLE)
