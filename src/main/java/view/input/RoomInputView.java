@@ -1,6 +1,5 @@
 
-Roominputview · JAVA
-        package view.input;
+package view.input;
 
 import controller.RoomController;
 import model.dto.RoomDTO;
