@@ -11,8 +11,18 @@ import java.util.Scanner;
 public class TimeSlotInputView {
 
     private final Scanner sc = new Scanner(System.in);
-    private final TimeSlotController controller = new TimeSlotController();
-    private final TimeSlotOutputView output = new TimeSlotOutputView();
+
+    private final TimeSlotController controller;
+
+    private final TimeSlotOutputView output;
+
+    public TimeSlotInputView(
+            TimeSlotController controller,
+            TimeSlotOutputView output
+    ) { this.controller = controller;
+        this.output = output;
+    }
+
 
     // 타임슬롯 관리 메뉴
     public void showMenu() {
