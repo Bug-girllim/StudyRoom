@@ -9,7 +9,11 @@ import java.util.List;
 
 public class TimeSlotController {
 
-    private final TimeSlotService service = new TimeSlotService();
+    private final TimeSlotService service;
+
+    public TimeSlotController(TimeSlotService timeSlotService) {
+        this.service = timeSlotService;
+    }
 
     // 1. 타임슬롯 전체 조회
     public List<TimeSlotDTO> getAllSlots() throws SQLException {

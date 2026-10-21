@@ -127,7 +127,7 @@ OutputView ← 처리 결과
 | Service | `model/service/` | 입력 검증과 예약·권한 등 업무 규칙 처리 |
 | DAO | `model/dao/` | JDBC를 통한 SQL 실행 |
 | DTO | `model/dto/` | 계층 사이의 데이터 전달 |
-| JDBC 접속 템플릿 | `config/JDBCTemplate.java` | 프로젝트 루트의 `db.properties`에서 `db.url`, `db.username`, `db.password`를 읽어 JDBC 연결을 생성하고 `Connection`·`Statement`·`ResultSet`을 해제 |
+| JDBC 접속 템플릿 | `config/JDBCTemplate.java` | 프로젝트 루트의 `src/main/resources/db.properties`에서 `db.url`, `db.username`, `db.password`를 읽어 JDBC 연결을 생성하고 `Connection`·`Statement`·`ResultSet`을 해제 |
 | SQL 조회 유틸 | `common/DBUtil.java` | 클래스패스의 `queries.xml`을 `Properties.loadFromXML()`로 읽고 `getQuery(String key)`로 SQL문 반환 |
 | 로그인 세션 | `common/LoginSession.java` | 로그인 회원 정보 및 권한 관리 |
 | SQL 리소스 | `src/main/resources/queries.xml` | DAO에서 사용할 SQL문을 키(`entry key`)별로 관리. 제공된 코드에는 `timeSlot.*` 쿼리가 포함됨 |
@@ -176,7 +176,7 @@ OutputView ← 처리 결과
 2. **DB 생성:** 팀에서 합의한 DB 스키마를 생성합니다.
 3. **테이블 생성:** `sql/schema.sql`을 실행합니다.
 4. **초기 데이터:** `sql/sample-data.sql`을 실행합니다. (`member`·`study_room`·`time_slot` → `reservation` 순서)
-5. **DB 연결:** 저장소의 `db.properties.example`을 참고하여 프로젝트 루트의 `db.properties`에 **자신의 로컬 접속 정보**를 입력합니다. 설정 키 `db.url`, `db.username`, `db.password`를 지정합니다.
+5. **DB 연결:** 저장소의 `db.properties.example`을 참고하여 프로젝트 루트의 `src/main/resources/db.properties`에 **자신의 로컬 접속 정보**를 입력합니다. 설정 키 `db.url`, `db.username`, `db.password`를 지정합니다.
 6. **실행:** IntelliJ IDEA에서 `Application.java` 파일을 열고 `main()` 메서드를 실행합니다.
 
 > **실행 전 확인:** DB 이름과 접속 설정 파일의 실제 위치는 통합한 소스 코드 기준으로 확인해야 합니다. 기획서에서 사용하는 `CHECK` 제약은 MySQL 8.0.16 이상에서 적용되므로 실제 DB 버전도 확인해야 합니다 (`SELECT VERSION();`).
@@ -253,4 +253,4 @@ OutputView ← 처리 결과
 
 ## 11. 보안 주의
 
-**보안:** 이번 학습용 버전은 실습 범위에 맞춰 가상 계정의 비밀번호를 해시 없이 저장하고 문자열로 비교합니다. 실제 사용자 정보나 실제 비밀번호를 사용하지 마세요. DB 접속 비밀번호가 들어간 `db.properties` 등은 `.gitignore`에 등록하여 Git에 올리지 마세요. 외부 배포 시에는 검증된 비밀번호 해시 방식 등 보안 개선이 필요합니다.
+**보안:** 이번 학습용 버전은 실습 범위에 맞춰 가상 계정의 비밀번호를 해시 없이 저장하고 문자열로 비교합니다. 실제 사용자 정보나 실제 비밀번호를 사용하지 마세요. DB 접속 비밀번호가 들어간 `src/main/resources/db.properties` 등은 `.gitignore`에 등록하여 Git에 올리지 마세요. 외부 배포 시에는 검증된 비밀번호 해시 방식 등 보안 개선이 필요합니다.
